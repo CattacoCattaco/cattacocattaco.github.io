@@ -1,0 +1,156 @@
+
+@import "compass/css3";
+@font-face {
+    font-family: 'roundedregular';
+    src: url('Rounded/rounded.woff2') format('woff2'),
+         url('Rounded/rounded.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+
+}
+html {
+  height: 100%;
+  width: 100%;
+  font-family: 'roundedregular', arial, serif;
+}
+body {
+  width: 100%;
+}
+h1 {
+  color: rgb(225, 220, 60);
+  font-family: 'roundedregular', arial, serif;
+  font-size: 240%;
+  padding: 1%;
+  text-wrap: nowrap;
+}
+h2 {
+  text-wrap: nowrap;
+  color: rgb(225, 220, 60);
+  font-family: 'roundedregular', arial, serif;
+  font-size: 175%;
+  padding: 1%;
+}
+.time-display {
+  color: rgb(50, 220, 120);
+}
+body {
+  background-color: rgb(12, 70, 45);
+  height: 100%;
+  width: 100%;
+}
+button.show {
+  border: none;
+  border-color: rgb(40, 40, 40);
+  background-color: rgb(195,230,255);
+  color: rgb(90,35,30);
+  font-family: 'roundedregular', arial, serif;
+  font-size: 110%;
+}
+button.show:hover {
+  border: none;
+  border-color: rgb(0, 0, 0);
+  background-color: rgb(155,180,235);
+  color: rgb(70,25,20);
+  font-family: 'roundedregular', arial, serif;
+  font-size: 110%;
+}
+button.hide {
+  display: none;
+}
+.button-container-show {
+  padding: 0.75%;
+}
+.button-container-hide {
+  display:none;
+}
+.setting-container {
+  padding: 0.75%;
+  padding-right: 0%;
+  width: 99.25%;
+  display: flex;
+  flex-direction: row;
+  align-items: middle;
+}
+li.inventory-head {
+  padding-top: 2%;
+  text-anchor: end;
+  font-size:30pt;
+  display: list-item;
+}
+li.show {
+  text-anchor: end;
+  font-size:18pt;
+  display: list-item;
+}
+li.hide {
+  text-anchor: end;
+  font-size:18pt;
+  display: none;
+}
+ul {
+  list-style-type: none;
+  list-style-position: inside;
+  height: 100%;
+  width: 100%;
+}
+.flex-container {
+  text-wrap: nowrap;
+  display: flex;
+  flex-direction: column;
+  flex-wrap: none;
+  align-items: stretch;
+  justify-content: stretch;
+  align-content: space-between;
+  overflow:scroll; 
+  -webkit-overflow-scrolling: touch;
+  height: 100%;
+  width: 50%;
+}
+.main-area {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  align-items: flex-start;
+  justify-content: flex-start;
+  align-content: center;
+  height: 85%;
+  width: 100%;
+}
+.top-bar {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  align-items: center;
+  justify-content: flex-start;
+  align-content: center;
+  height: 15%;
+  width: 100%;
+  overflow: auto;
+}
+.settings-area {
+  display: none;
+  flex-direction: column;
+  flex-wrap: nowrap;
+  align-items: center;
+  overflow: auto;
+  justify-content: flex-start;
+  align-content: flex-start;
+  background-color: rgb(120,230,250);
+  height: 80%;
+  width: 80%;
+  position: absolute;
+  left: 10%;
+  right: 10%;
+}
+
+h3.settings-label {
+  vertical-align: top;
+  font-size: 20pt;
+}
+
+#close-settings-button {
+  background-color: rgba(0,0,0,0);
+  position: absolute;
+  right: 1%;
+  top: 1%;
+}

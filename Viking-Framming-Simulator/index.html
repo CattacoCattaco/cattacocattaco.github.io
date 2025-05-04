@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width">
+  <title>replit</title>
+  <link href="style.css" rel="stylesheet" type="text/css" />
+  <link rel="stylesheet" href="a8z-toggle-switch-main/build/toggle-switch.css" />
+</head>
+
+<body>
+  <div class="top-bar">
+    <h1>
+      Viking Framming Simulator
+    </h1>
+    <h2 id="time" class="time-display">
+      Spring(Planting)  0th,   Year 800
+    </h2>
+    <h2 id="day-percent-left">
+      100% of day left
+    </h2>
+    <div class="button-container-show">
+      <button type="button" onclick="open_settings()" id="open-settings-button" class="show">
+        Settings
+      </button>
+    </div>
+  </div>
+  <div class="settings-area" id="settings-area">
+    <button type="button" onclick="close_settings()" id="close-settings-button" class="show">
+      X
+    </button>
+    <div class="setting-container">
+      <h3 clas="settings-label">
+        Do new day alert
+      </h3>
+      <label class="a8z-toggle-switch" data-size="sm" data-style="rounded" data-color="green">
+        <input type="checkbox" id="do_new_day_alert" checked>
+        <span class="toggle">
+          <span class="switch"></span>
+        </span>
+      </label>
+    </div>
+    <div class="setting-container">
+      <h3 clas="settings-label">
+        Do task complete alert
+      </h3>
+      <label class="a8z-toggle-switch" data-size="sm" data-style="rounded" data-color="green">
+        <input type="checkbox" id="do_task_complete_alert" checked>
+        <span class="toggle">
+          <span class="switch"></span>
+        </span>
+      </label>
+    </div>
+    <div class="setting-container">
+      <h3 clas="settings-label">
+        Do not enough time alert
+      </h3>
+      <label class="a8z-toggle-switch" data-size="sm" data-style="rounded" data-color="green">
+        <input type="checkbox" id="do_not_enough_time_alert" checked>
+        <span class="toggle">
+          <span class="switch"></span>
+        </span>
+      </label>
+    </div>
+    <div class="setting-container">
+      <h3 clas="settings-label">
+        Do new season warning alert
+      </h3>
+      <label class="a8z-toggle-switch" data-size="sm" data-style="rounded" data-color="green">
+        <input type="checkbox" id="do_new_season_warning_alert" checked>
+        <span class="toggle">
+          <span class="switch"></span>
+        </span>
+      </label>
+    </div>
+    <div class="setting-container">
+      <h3 clas="settings-label">
+        Do damage alert
+      </h3>
+      <label class="a8z-toggle-switch" data-size="sm" data-style="rounded" data-color="green">
+        <input type="checkbox" id="do_damage_alert" checked>
+        <span class="toggle">
+          <span class="switch"></span>
+        </span>
+      </label>
+    </div>
+    <div class="setting-container">
+      <button type="button" onclick="save_to_browser()" id="save-to-browser-button" class="show">
+        Save Game to Browser (Should happen automatically)
+      </button>
+    </div>
+    <div class="setting-container">
+      <button type="button" onclick="save_to_file()" id="save-to-file-button" class="show">
+        Save Game to File (NOT automatic)
+      </button>
+    </div>
+    <div class="setting-container">
+      <input type="file" id="file-input" accept=".txt" />
+      <button type="button" onclick="load_from_file()" id="save-to-file-button" class="show">
+        Load Game from File
+      </button>
+    </div>
+  </div>
+  <div class="main-area">
+    <div class="flex-container" id="button-area">
+      <h2>
+        Seasonal Objectives
+      </h2>
+      <div class="button-container-show">
+        <button type="button" value=0 onclick="do_objective(this.value,this,false)" id="objective-0-button" class="show">
+          Spread manure over hayfields: -0.5 days (0/40)
+        </button>
+      </div>
+      <div class="button-container-show">
+        <button type="button" value=1 onclick="do_objective(this.value,this,false)" id="objective-1-button" class="show">
+          Break soil via Ards -0.5 days (0/45)
+        </button>
+      </div>
+      <div class="button-container-hide">
+        <button type="button" value=2 onclick="do_objective(this.value,this,false)" id="objective-2-button" class="hide">
+          Null
+        </button>
+      </div>
+      <div class="button-container-hide">
+        <button type="button" value=3 onclick="do_objective(this.value,this,false)" id="objective-3-button"class="hide">
+          Null
+        </button>
+      </div>
+      <div class="button-container-hide">
+        <button type="button" value=4 onclick="do_objective(this.value,this,false)" id="objective-4-button" class="hide">
+          Null
+        </button>
+      </div>
+      <div class="button-container-hide">
+        <button type="button" value=5 onclick="do_objective(this.value,this,false)" id="objective-5-button" class="hide">
+          Null
+        </button>
+      </div>
+      <h2>
+        Daily Objectives
+      </h2>
+      <div class="button-container-show">
+        <button type="button" value=0 onclick="do_objective(this.value,this,true)" id="daily-objective-0-button" class="show">
+          Milk cows: -0.1 days, requires cattle x1 (0/2)
+        </button>
+      </div>
+      <div class="button-container-hide">
+        <button type="button" value=1 onclick="do_objective(this.value,this,true)" id="daily-objective-1-button" class="hide">
+          Null
+        </button>
+      </div>
+      <div class="button-container-hide">
+        <button type="button" value=2 onclick="do_objective(this.value,this,true)" id="daily-objective-2-button" class="hide">
+          Null
+        </button>
+      </div>
+      <div class="button-container-hide">
+        <button type="button" value=3 onclick="do_objective(this.value,this,true)" id="daily-objective-3-button" class="hide">
+          Null
+        </button>
+      </div>
+      <div class="button-container-hide">
+        <button type="button" value=4 onclick="do_objective(this.value,this,true)" id="daily-objective-4-button" class="hide">
+          Null
+        </button>
+      </div>
+      <div class="button-container-hide">
+        <button type="button" value=5 onclick="do_objective(this.value,this,true)" id="daily-objective-5-button" class="hide">
+          Null
+        </button>
+      </div>
+      <div class="button-container-hide">
+        <button type="button" value=6 onclick="do_objective(this.value,this,true)" id="daily-objective-6-button" class="hide">
+          Null
+        </button>
+      </div>
+      <div class="button-container-hide">
+        <button type="button" value=7 onclick="do_objective(this.value,this,true)" id="daily-objective-7-button" class="hide">
+          Null
+        </button>
+      </div>
+      <div class="button-container-hide">
+        <button type="button" value=8 onclick="do_objective(this.value,this,true)" id="daily-objective-8-button" class="hide">
+          Null
+        </button>
+      </div>
+      <div class="button-container-hide">
+        <button type="button" value=9 onclick="do_objective(this.value,this,true)" id="daily-objective-9-button" class="hide">
+          Null
+        </button>
+      </div>
+      <div class="button-container-hide">
+        <button type="button" value=10 onclick="do_objective(this.value,this,true)" id="daily-objective-10-button" class="hide">
+          Null
+        </button>
+      </div>
+      <div class="button-container-hide">
+        <button type="button" value=11 onclick="do_objective(this.value,this,true)" id="daily-objective-11-button" class="hide">
+          Null
+        </button>
+      </div>
+      <div class="button-container-hide">
+        <button type="button" value=12 onclick="do_objective(this.value,this,true)" id="daily-objective-12-button" class="hide">
+          Null
+        </button>
+      </div>
+      <div class="button-container-hide">
+        <button type="button" value=13 onclick="do_objective(this.value,this,true)" id="daily-objective-13-button" class="hide">
+          Null
+        </button>
+      </div>
+      <div class="button-container-hide">
+        <button type="button" value=14 onclick="do_objective(this.value,this,true)" id="daily-objective-14-button" class="hide">
+          Null
+        </button>
+      </div>
+      <div class="button-container-hide">
+        <button type="button" value=15 onclick="do_objective(this.value,this,true)" id="daily-objective-15-button" class="hide">
+          Null
+        </button>
+      </div>
+      <div class="button-container-hide">
+        <button type="button" value=16 onclick="do_objective(this.value,this,true)" id="daily-objective-16-button" class="hide">
+          Null
+        </button>
+      </div>
+      <div class="button-container-hide">
+        <button type="button" value=17 onclick="do_objective(this.value,this,true)" id="daily-objective-17-button" class="hide">
+          Null
+        </button>
+      </div>
+      <div class="button-container-hide">
+        <button type="button" value=18 onclick="do_objective(this.value,this,true)" id="daily-objective-18-button" class="hide">
+          Null
+        </button>
+      </div>
+      <div class="button-container-hide">
+        <button type="button" value=19 onclick="do_objective(this.value,this,true)" id="daily-objective-19-button" class="hide">
+          Null
+        </button>
+      </div>
+      <div class="button-container-show">
+        <button type="button" onclick="sleep()" id="sleep-button" class="show">
+          Sleep (Ends the day)
+        </button>
+      </div>
+    </div>
+    <div class="flex-container">
+      <ul>
+        <li id="Inventory" class="inventory-head">
+          Inventory
+        </li>
+        <li id="Energy" class="show">
+          <p id="Inventory all items list">
+            - Energy 100%<br>
+            - Nourishment 100%<br>
+            - Hydration 100%<br>
+            - Animal nourishment 100%<br>
+            - Seeds x50<br>
+            - Unpreserved meat x0<br>
+            - Preserved meat x20<br>
+            - Piece of bread x50<br>
+            - Dying cattle x1<br>
+            - Cattle x3<br>
+            - Chicken x4<br>
+          </p>
+        </li>
+        
+      </ul>
+    </div>
+  </div>
+  <script src="script.js"></script>
+</body>
+
+</html>
