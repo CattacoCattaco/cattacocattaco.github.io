@@ -8,7 +8,7 @@ const day_percent_left_element = document.getElementById("day-percent-left");
 
 const time_element = document.getElementById("time");
 
-const seasons = [["Spring(Planting)", "rgb(50, 220, 120)"], ["Summer(Animal Prep)", "rgb(255, 255, 5)"], ["Fall(Harvest)", "rgb(235, 66, 46)"], ["Winter(Misc)", "rgb(148, 198, 227)"]]; //Season names and their colors
+const seasons = [["Spring(Planting)", "rgb(50, 220, 120)"], ["Summer(Animal Prep)", "rgb(255, 225, 55)"], ["Fall(Harvest)", "rgb(225, 76, 46)"], ["Winter(Misc)", "rgb(148, 198, 227)"]]; //Season names and their colors
 const season_splits = [91, 182, 273, 364]; //Last day of each season
 const season_day_offsets = [-1, 91, 182, 273]; //How much to subtract from day to get date (day 0 = Spring 1st, day 92 = Summer 1st, etc.)
 var current_season = "Spring(Planting)";
@@ -46,34 +46,35 @@ var settings = {
 };
 
 //Objectives in format [task, steps, objective probability as decimal based on factors]
-//Steps in format [name, rewards, time usage, quantity(-1 = unlimited),requirements,bonuses]
-//bonuses in format [bonus giver, min bonus, max bonus, use bonus giver?]
+//Steps in format [name, rewards, time usage, quantity(-1 = unlimited), requirements, bonuses]
+//Bonuses in format [bonus giver, min bonus, max bonus, use bonus giver?, bonus type]
+//Bonus types: "Amount" = improves reward amount, "Uses" = increases quantity, only uses min bonus
 var seasonal_objectives = [
    [
-      ["Spread manure over hayfields",[
-         ["Spread manure over hayfields",[["Grass for grazing",5]], 0.5, 40,[],[]]
-      ],[[1,"100%"]]],
-      ["Plant crops",[
-         ["Break soil via ards",[["Broken Soil",1]], 0.5, 45,[]],
-         ["Sow seeds",[["Sowed seeds",1]], 1, 45,[["Seeds",1],["Broken Soil",1]]],
-         ["Sacrifice food to the gods",[["Blessed soil",1]], 0.1, 1,[["Piece of bread",3],["Egg",2],["Liter of beer",1]]]
-      ],[[1,"100%"]],[]],
+      ["Spread manure over hayfields", [
+         ["Spread manure over hayfields", [["Grass for grazing", 5]], 0.5, 40, [], []]
+      ], [[1, "100%"]]],
+      ["Plant crops", [
+         ["Break soil via ards", [["Broken Soil", 1]], 0.5, 45, [], []],
+         ["Sow seeds", [["Sowed seeds",1]], 1, 45, [["Seeds", 1], ["Broken Soil", 1]], []],
+         ["Sacrifice food to the gods", [["Blessed soil", 1]], 0.1, 1, [["Piece of bread", 3], ["Egg", 2], ["Liter of beer", 1]], []]
+      ], [[1, "100%"]]],
    ],
    [
-      ["Make butter and cheese",[
-         ["Churn milk into butter and cheese",[["Cheese",1],["Butter",1]], 0.5, -1,[["Liter of milk",6]],[]]
-      ],[[1,"100%"]]],
+      ["Make butter and cheese", [
+         ["Churn milk into butter and cheese", [["Cheese", 1], ["Butter", 1]], 0.5, -1, [["Liter of milk", 6]], []]
+      ], [[1, "100%"]]],
       ["Slaughter Dying cattle",[
-         ["Slaughter Dying cattle",[["Unpreserved meat",10]], 0.5, -1,[["Dying cattle",1]],[]],
-      ],[[1,"Dying cattle"]]],
-      ["Slaughter Dying chicken",[
-         ["Slaughter Dying chicken",[["Unpreserved meat",4]], 0.5, -1,[["Dying chicken",1]],[]],
-      ],[[1,"Dying chicken"]]],
+         ["Slaughter Dying cattle",[["Unpreserved meat",10]], 0.5, -1, [["Dying cattle", 1]], []],
+      ], [[1, "Dying cattle"]]],
+      ["Slaughter Dying chicken", [
+         ["Slaughter Dying chicken", [["Unpreserved meat", 4]], 0.5, -1, [["Dying chicken", 1]], []],
+      ], [[1, "Dying chicken"]]],
    ],
    [
-      ["Harvest crops",[
-         ["Harvest crops",[["Seeds",0.8],["Harvested crops",2]], 1, 90,[["Sowed seeds", 0.5]],[["blessed soil",1.2,2,true]]]
-      ],[[1,"100%"]]],
+      ["Harvest crops", [
+         ["Harvest crops", [["Seeds", 0.8], ["Harvested crops", 2]], 1, 90, [["Sowed seeds", 0.5]], [["blessed soil", 1.2, 2, true, "Amount"]]]
+      ], [[1, "100%"]]],
    ],
    [
 
@@ -82,45 +83,45 @@ var seasonal_objectives = [
 var year_round_objectives = [
 ];
 var daily_objectives = [
-   ["Milk cows",[
-      ["Milk cows",[["Liter of milk",6]], 0.1, 2,[["Cattle",-1]],[["Cattle",0.5,1.5,false]]],
-   ],[[1,"100%"]]],
-   ["Collect eggs",[
-      ["Collect eggs",[["Egg",1]], 0.1, 2,[["Chicken",-2]],[["Chicken",0.5,1,false]]],
-   ],[[1,"100%"]]],
-   ["Feed cattle",[
-      ["Feed livestock",[["Animal nourishment",10]], 0.6, 3,[["Grass for grazing",1]]]
-   ],[[1,"100%"]],[]],
-   ["Feed yourself meat",[
-      ["Eat meat",[["Nourishment",15],["Energy",4]], 0.1, 40,[["Preserved meat",1]]]
-   ],[[1,"100%"]],[]],
-   ["Feed yourself bread",[
-      ["Eat bread",[["Nourishment",7],["Energy",2]], 0.1, 40,[["Piece of bread",1]]]
-   ],[[1,"100%"]],[]],
-   ["Feed yourself cheese",[
-      ["Eat cheese",[["Nourishment",9],["Energy",3]], 0.1, 40,[["Cheese",1]]]
-   ],[[1,"100%"]],[]],
-   ["Hydrate yourself",[
-      ["Drink water",[["Hydration",8]], 0.1, 40,[]]
-   ],[[1,"100%"]],[]],
-   ["Drink(beer)",[
-      ["Drink beer",[["Hydration",15],["Energy",0.4]], 0.1, 40,[["Liter of beer",1]]]
-   ],[[1,"100%"]],[]],
-   ["Make bread",[
-      ["Make bread",[["Piece of bread",3]], 0.25, 15,[["Harvested crops",1]]]
-   ],[[1,"100%"]],[]],
-   ["Make beer",[
-      ["Make beer",[["Liter of beer",2]], 0.1, 15,[["Harvested crops",1]]]
-   ],[[1,"100%"]],[]],
-   ["Preserve meat",[
-      ["Preserve meat",[["Preserved meat",1]], 0.1, 15,[["Unpreserved meat",1]]]
-   ],[[1,"100%"]],[]],
-   ["Repair fencing",[
-      ["Repair fencing",[], 1, -1,[["Disrepaired fencing",1]],[]]
-   ],[[1,"Disrepaired fencing"]]],
-   ["Repair tools",[
-      ["Repair tools",[], 1, -1,[["Damaged tools",1]],[]]
-   ],[[1,"Damaged tools"]]],
+   ["Milk cows", [
+      ["Milk cows", [["Liter of milk", 6]], 0.1, 1, [["Cattle", -1]], [["Cattle", 1, 1, false, "Uses"]]]
+   ], [[1, "100%"]]],
+   ["Collect eggs", [
+      ["Collect eggs", [["Egg", 1]], 0.1, 1, [["Chicken", -1]], [["Chicken", 1, 1, false, "Uses"]]]
+   ], [[1, "100%"]]],
+   ["Feed cattle", [
+      ["Feed livestock", [["Animal nourishment", 10]], 0.6, 3, [["Grass for grazing", 1]]]
+   ], [[1, "100%"]]],
+   ["Feed yourself meat", [
+      ["Eat meat", [["Nourishment", 15], ["Energy", 4]], 0.1, 40, [["Preserved meat", 1]]]
+   ], [[1, "100%"]]],
+   ["Feed yourself bread", [
+      ["Eat bread", [["Nourishment", 7], ["Energy", 2]], 0.1, 40, [["Piece of bread", 1]]]
+   ], [[1, "100%"]]],
+   ["Feed yourself cheese", [
+      ["Eat cheese", [["Nourishment", 9], ["Energy", 3]], 0.1, 40, [["Cheese", 1]]]
+   ], [[1, "100%"]]],
+   ["Hydrate yourself", [
+      ["Drink water", [["Hydration", 8]], 0.1, 40, []]
+   ], [[1, "100%"]]],
+   ["Drink(beer)", [
+      ["Drink beer", [["Hydration", 15], ["Energy", 0.4]], 0.1, 40, [["Liter of beer", 1]]]
+   ], [[1, "100%"]]],
+   ["Make bread", [
+      ["Make bread", [["Piece of bread", 3]], 0.25, 15, [["Harvested crops", 1]]]
+   ], [[1,"100%"]]],
+   ["Make beer", [
+      ["Make beer", [["Liter of beer", 2]], 0.1, 15, [["Harvested crops", 1]]]
+   ], [[1,"100%"]]],
+   ["Preserve meat", [
+      ["Preserve meat", [["Preserved meat", 1]], 0.1, 15, [["Unpreserved meat", 1]]]
+   ], [[1,"100%"]]],
+   ["Repair fencing", [
+      ["Repair fencing", [], 1, -1, [["Disrepaired fencing", 1]]]
+   ], [[1,"Disrepaired fencing"]]],
+   ["Repair tools", [
+      ["Repair tools", [], 1, -1, [["Damaged tools", 1]]]
+   ], [[1,"Damaged tools"]]],
 ]
 
 //Tasks in format [objective, [step, step instance],completed?]
@@ -346,14 +347,14 @@ function new_day()
 function sleep()
 {
    var energy_gained = (day_percent_left > 0);
-   change_inventory_count("Energy", day_percent_left/17);
+   change_inventory_count("Energy", day_percent_left / 20);
 
-   change_inventory_count("Energy",-0.1);
-   change_inventory_count("Animal nourishment",-2.5);
-   change_inventory_count("Nourishment",-2.5);
-   change_inventory_count("Hydration",-2.5);
+   change_inventory_count("Energy", -0.1);
+   change_inventory_count("Animal nourishment", -2.5);
+   change_inventory_count("Nourishment", -2.5);
+   change_inventory_count("Hydration", -15.0);
 
-   for(i = 0; i < Math.floor(inventory["Cattle"]/2); i++)
+   for(i = 0; i < Math.floor(inventory["Cattle"] / 2); i++)
    {
       if(Math.random() < 0.15)
       {
@@ -363,7 +364,7 @@ function sleep()
 
    for(i = 0; i < Math.floor(inventory["Cattle"]); i++)
    {
-      if(Math.random() < (0.005+(inventory["Disrepaired fencing"]*0.01)))
+      if(Math.random() < (0.005 + (inventory["Disrepaired fencing"] * 0.01)))
       {
          change_inventory_count("Cattle", -1);
          change_inventory_count("Dying cattle", 1);
@@ -545,7 +546,7 @@ function do_objective(index, button, is_daily)
    }
    var step = task[0][1][task[1][0]];
 
-   if(day_percent_left/100 >= (step[2] / (inventory["Energy"]/100)))
+   if(day_percent_left / 100 >= (step[2] / (inventory["Energy"] / 100)))
    {
       var requirements_met = true;
       for(var requirement in step[4])
@@ -558,19 +559,31 @@ function do_objective(index, button, is_daily)
       }
       if(requirements_met)
       {
+         var max_uses = step[3];
          var multiplier = 1;
          for(var bonus in step[5])
          {
             bonus = step[5][bonus];
 
-            if(inventory[bonus[0]]>0)
+            if(inventory[bonus[0]] > 0 & bonus[4] == "Amount")
             {
-               var difference = bonus[2]-bonus[1];
-               var bonus_amount = (bonus[1]+(difference*Math.random()))*inventory[bonus[0]];
+               var difference = bonus[2] - bonus[1];
+               var bonus_amount = (bonus[1] + (difference * Math.random())) * inventory[bonus[0]];
                multiplier *= bonus_amount;
+
                if(bonus[3])
                {
-                  change_inventory_count(bonus[0],-inventory[bonus[0]]);
+                  change_inventory_count(bonus[0], -inventory[bonus[0]]);
+               }
+            }
+            else if(inventory[bonus[0]] > 0 & bonus[4] == "Uses")
+            {
+               var bonus_amount = bonus[1] * inventory[bonus[0]];
+               max_uses *= bonus_amount;
+
+               if(bonus[3])
+               {
+                  change_inventory_count(bonus[0], -inventory[bonus[0]]);
                }
             }
          }
@@ -600,7 +613,7 @@ function do_objective(index, button, is_daily)
 
          var completed = false;
 
-         if(task[1][1] == step[3])
+         if(task[1][1] == max_uses)
          {
             task[1][0] = task[1][0]+1;
             if(task[0][1].length <= task[1][0])
@@ -723,10 +736,11 @@ function update_time()
       if(Math.random() < objective_probability)
       {
          //add the task to current_daily_tasks at instance 0 of step 0
-         current_daily_tasks.push([objective,[0,0],false]);
+         var new_task = [objective, [0,0] , false]
+         current_daily_tasks.push(new_task);
 
          var button = get_daily_objective_button(objective_index_in_current_daily_tasks);
-         button.innerHTML = get_desired_objective_button_text([objective,[0,0],false]);
+         button.innerHTML = get_desired_objective_button_text(new_task);
          button.className="show";
          button.parentElement.className="button-container-show";
 
@@ -889,7 +903,25 @@ function get_desired_objective_button_text(task)
 
    if(step[3] > 0)
    {
-      text_to_display += " (" + task[1][1] + "/" + step[3] + ")";
+      var max_uses = step[3];
+
+      for(var bonus in step[5])
+      {
+         bonus = step[5][bonus]
+
+         if(inventory[bonus[0]] > 0 & bonus[4] == "Uses")
+         {
+            var bonus_amount = bonus[1] * inventory[bonus[0]];
+            max_uses *= bonus_amount;
+
+            if(bonus[3])
+            {
+               change_inventory_count(bonus[0], -inventory[bonus[0]]);
+            }
+         }
+      }
+
+      text_to_display += " (" + task[1][1] + "/" + max_uses + ")";
    }
    else
    {

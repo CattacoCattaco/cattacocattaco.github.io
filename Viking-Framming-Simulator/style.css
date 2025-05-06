@@ -71,6 +71,9 @@ button.hide {
   flex-direction: row;
   align-items: middle;
 }
+li {
+  color: rgb(80,140,255);
+}
 li.inventory-head {
   padding-top: 2%;
   text-anchor: end;
