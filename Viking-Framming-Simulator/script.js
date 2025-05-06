@@ -22,7 +22,7 @@ var day_percent_left = 100;
 const percentageified_items = ["Energy","Nourishment","Hydration","Animal nourishment"];
 //items which can't be split
 const nonpartialables = ["Butter","Calf","Cattle","Cheese","Chick","Chicken","Damaged tools","Disrepaired fencing","Dying cattle","Dying chicken","Egg","Harvested crops","Piece of bread","Preserved meat","Unpreserved meat"];
-var inventory = {
+var starting_inventory = {
    "Energy": 100,
    "Nourishment": 100,
    "Hydration": 100,
@@ -36,6 +36,8 @@ var inventory = {
    "Cattle": 3,
    "Chicken": 4,
 };
+
+var inventory = starting_inventory;
 
 var settings = {
    "do_new_day_alert": true,
@@ -160,13 +162,6 @@ window.onload = new_game();
 
 function new_game()
 {
-   new_day();
-
-   document.getElementById("do_new_day_alert").addEventListener('input', new_day_setting_change, false);
-   document.getElementById("do_task_complete_alert").addEventListener('input', task_complete_setting_change, false);
-   document.getElementById("do_not_enough_time_alert").addEventListener('input', not_enough_time_setting_change, false);
-   document.getElementById("do_new_season_warning_alert").addEventListener('input', new_season_setting_change, false);
-   document.getElementById("do_damage_alert").addEventListener('input', damage_setting_change, false);
 
    if(localStorage.getItem("inventory") && (localStorage.getItem("lost") != "true"))
    {
@@ -174,6 +169,29 @@ function new_game()
    }
    else
    {
+      document.getElementById("do_new_day_alert").addEventListener('input', new_day_setting_change, false);
+      document.getElementById("do_task_complete_alert").addEventListener('input', task_complete_setting_change, false);
+      document.getElementById("do_not_enough_time_alert").addEventListener('input', not_enough_time_setting_change, false);
+      document.getElementById("do_new_season_warning_alert").addEventListener('input', new_season_setting_change, false);
+      document.getElementById("do_damage_alert").addEventListener('input', damage_setting_change, false);
+      
+      inventory = starting_inventory
+      update_inventory_list()
+
+      current_day = 364;
+      year = 799;
+
+      current_tasks = [
+         [seasonal_objectives[0][0],[0,0],false],
+         [seasonal_objectives[0][1],[0,0],false]
+      ];
+
+      current_daily_tasks = [
+         [daily_objectives[0],[0,0],false],
+      ];
+
+      new_day();
+
       save_to_browser();
    }
 }
@@ -226,13 +244,13 @@ function close_settings()
 //Save data to browser via localStorage
 function save_to_browser()
 {
-   localStorage.setItem("inventory",JSON.stringify(inventory));
-   localStorage.setItem("settings",JSON.stringify(settings));
-   localStorage.setItem("current_tasks",JSON.stringify(current_tasks));
-   localStorage.setItem("current_daily_tasks",JSON.stringify(current_daily_tasks));
-   localStorage.setItem("current_day",JSON.stringify(current_day));
-   localStorage.setItem("day_percent_left",JSON.stringify(day_percent_left));
-   localStorage.setItem("lost","false");
+   localStorage.setItem("inventory", JSON.stringify(inventory));
+   localStorage.setItem("settings", JSON.stringify(settings));
+   localStorage.setItem("current_tasks", JSON.stringify(current_tasks));
+   localStorage.setItem("current_daily_tasks", JSON.stringify(current_daily_tasks));
+   localStorage.setItem("current_day", JSON.stringify(current_day));
+   localStorage.setItem("day_percent_left", JSON.stringify(day_percent_left));
+   localStorage.setItem("lost", "false");
 }
 
 //Load data from browser via localStorage
@@ -335,11 +353,11 @@ function new_day()
    day_percent_left = 100;
    update_time_left_in_day();
 
-   current_day+=1;
+   current_day += 1;
    while(current_day > 364)
    {
-      year+=1;
-      current_day-=365;
+      year += 1;
+      current_day -= 365;
    }
    update_time();
 }
@@ -437,8 +455,6 @@ function sleep()
    
    new_day();
 
-   console.log(settings["do_new_day_alert"]);
-
    if(settings["do_new_day_alert"])
    {
       if(energy_gained)
@@ -453,25 +469,25 @@ function sleep()
 
    switch(true)
    {
-      case (inventory["Animal nourishment"]<=0): 
+      case (inventory["Animal nourishment"] <= 0): 
+         localStorage.setItem("lost", "true");
          window.alert("Your animals have died of starvation. You lose.");
-         localStorage.setItem("lost","true");
-         location.reload();
+         new_game();
          break;
-      case (inventory["Nourishment"]<=0):
+      case (inventory["Nourishment"] <= 0):
+         localStorage.setItem("lost", "true");
          window.alert("You have died of starvation. You lose.");
-         localStorage.setItem("lost","true");
-         location.reload();
+         new_game();
          break;
-      case (inventory["Hydration"]<=0):
+      case (inventory["Hydration"] <= 0):
+         localStorage.setItem("lost", "true");
          window.alert("You have died of dehydration. You lose.");
-         localStorage.setItem("lost","true");
-         location.reload();
+         new_game();
          break;
-      case (inventory["Energy"]<=0):
+      case (inventory["Energy"] <= 0):
+         localStorage.setItem("lost", "true");
          window.alert("You have died of exhaustion. You lose.");
-         localStorage.setItem("lost","true");
-         location.reload();
+         new_game();
          break;
    }
 
@@ -480,8 +496,6 @@ function sleep()
 
 function change_inventory_count(name,change)
 {
-   console.log(name);
-   
    if(inventory[name]>-10000000000)
    {
       inventory[name]=inventory[name]+change;
@@ -865,7 +879,6 @@ function update_settings()
    var initial_settings = settings;
    for(var setting in initial_settings)
    {
-      console.log(setting);
       document.getElementById(setting).checked = initial_settings[setting];
    }
    settings = initial_settings;
