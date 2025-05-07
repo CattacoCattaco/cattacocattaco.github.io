@@ -4,20 +4,35 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width">
-  <title>replit</title>
+  <title>Irregular Dump of Knives</title>
   <link href="style.css" rel="stylesheet" type="text/css" />
 </head>
 
 <body>
-  <div class="half-div" id="button-area">
-    <div class="button-container">
-      <button type="button" onclick="makeButton()">
-        Make me a button
-      </button>
-    </div>
+  <div class="top-bar" id="top-bar">
   </div>
-  <div class="half-div" id="randomness-area">
-    
+  <form class="settings" id="settings" hidden="true">
+    <button type="button" onclick="closeSettings()" id="close-settings-button" class="close-settings-button">
+      X
+    </button>
+    <button type="button" onclick="saveToFile()" id="save-to-file-button" class="save-to-file-button">
+      Save to file
+    </button><br>
+    <input type="file" id="file-input" accept=".txt" />
+    <button type="button" onclick="loadFromFile()" id="load-from-file-button" class="load-from-file-button">
+      Load from file
+    </button>
+  </form>
+  <div class="half-div-holder" id="half-div-holder">
+    <div class="half-div" id="button-area">
+      <div class="button-container">
+        <button type="button" onclick="makeButton()">
+          Make me a button
+        </button>
+      </div>
+    </div>
+    <div class="half-div" id="randomness-area">
+    </div>
   </div>
   <script src="script.js"></script>
 </body>

@@ -1,6 +1,9 @@
 :root {
   --background-color: #d1fedd;
   --text-color: #000000;
+  --button-color: #cccfff;
+  --button-text-color: #000000;
+  --ominous-color: #ff00ff;
 }
 
 html {
@@ -12,23 +15,77 @@ html {
 body {
   background-color: var(--background-color);
   display: flex;
-  flex-direction: row;
+  flex-direction: column;
 }
 
 p {
-  padding: 1%;
+  padding-top: 2%;
+  padding-right: 3%;
+  margin: 0;
+}
+
+button, input::file-selector-button {
+  background-color: var(--button-color);
+  color: var(--button-text-color);
+  border-color: #999;
 }
 
 .button-container {
   padding: 1%;
 }
 
+.half-div-holder {
+  background-color: var(--background-color);
+  display: flex;
+  flex-direction: row;
+}
+
 .half-div {
+  height: fit-content;
   width: 50%;
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
   align-items: flex-start;
   justify-content: flex-start;
+  overflow-y: auto;
+  overflow-x: auto;
+}
+
+.top-bar {
+  height: fit-content;
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  justify-content: flex-start;
   overflow: auto;
+}
+
+.settings[hidden = "true"] {
+  display: none;
+}
+
+.settings {
+  flex-direction: column;
+  flex-wrap: nowrap;
+  align-items: center;
+  overflow: auto;
+  justify-content: flex-start;
+  align-content: flex-start;
+  border-width: 2px;
+  border-color: var(--text-color);
+  background-color: rgb(190,230,250);
+  height: 80%;
+  width: 80%;
+  position: absolute;
+  left: 10%;
+  top: 10%;
+}
+
+.close-settings-button {
+  position: absolute;
+  right: 1%;
+  top: 1%;
 }
