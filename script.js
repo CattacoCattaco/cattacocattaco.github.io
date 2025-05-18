@@ -37,7 +37,7 @@ function saveAllDataToFile()
   downloadToFile(data, 'CattacoCattaco_github_io_save.txt', 'text/plain')
 }
 
-function loadAllDataFromFile()
+function loadAllDataFromFile(postLoadFunc)
 {
   if (!selectedFile) return;
 
@@ -53,6 +53,8 @@ function loadAllDataFromFile()
 
       localStorage.setItem(entry[0], entry[1]);
     }
+
+    postLoadFunc.apply();
   }
 
   reader.onerror = (e) => {
