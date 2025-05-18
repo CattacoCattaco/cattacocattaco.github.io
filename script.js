@@ -1,3 +1,5 @@
+const file_input = document.getElementById("file-input");
+
 const downloadToFile = (content, filename, contentType) => {
   const a = document.createElement('a');
   const file = new Blob([content], { type: contentType });
