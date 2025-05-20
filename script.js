@@ -49,7 +49,7 @@ function loadAllDataFromFile(postLoadFunc)
 
     for(var entry in data)
     {
-      entry = data[entry].split("=");
+      entry = data[entry].split("=", 1);
 
       localStorage.setItem(entry[0], entry[1]);
     }
