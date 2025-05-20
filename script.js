@@ -53,7 +53,7 @@ function loadAllDataFromFile(postLoadFunc)
 
       for(var i = 2; i < entry.length; i++)
       {
-        entry[1] += entry[i];
+        entry[1] += "=" + entry[i];
       }
 
       localStorage.setItem(entry[0], entry[1]);
